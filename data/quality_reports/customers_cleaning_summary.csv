@@ -1,0 +1,11 @@
+rule,rejected_rows
+Duplicate customer_id,2
+Negative annual_income,1
+Invalid customer_segment,1
+Invalid risk_score,1
+Future join_date,1
+Customer under 18,1
+Missing customer_id,1
+Missing or invalid birth_date,1
+Missing or invalid join_date,1
+Missing annual_income,1

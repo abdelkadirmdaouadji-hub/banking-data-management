@@ -1,0 +1,11 @@
+check,errors,status
+Duplicate customer IDs,2,FAIL
+Negative annual income,1,FAIL
+Invalid customer segments,1,FAIL
+Invalid risk scores,1,FAIL
+Future join dates,1,FAIL
+Customers under 18,1,FAIL
+Missing customer ID,1,FAIL
+Missing or invalid birth date,1,FAIL
+Missing or invalid join date,1,FAIL
+Missing annual income,1,FAIL
