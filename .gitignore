@@ -21,3 +21,10 @@ venv/
 # Temporary files
 *.tmp
 *.log
+
+# Generated datasets
+data/raw/*.csv
+data/processed/*.csv
+
+# Legacy generated dataset
+data/customers.csv
