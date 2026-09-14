@@ -21,6 +21,8 @@ RAW_DATA_DIR = PROJECT_ROOT / "data" / "raw"
 PROCESSED_DATA_DIR = PROJECT_ROOT / "data" / "processed"
 # Number of synthetic customers
 N_CUSTOMERS = 50_000
+N_BRANCHES = 25
+N_ACCOUNTS = 65_000
 
 print("Banking data generator initialized.")
 print(f"Customers to generate: {N_CUSTOMERS:,}")
@@ -103,11 +105,142 @@ def generate_customers(n_customers):
 
     return pd.DataFrame(customers)
 
-customers_df = generate_customers(N_CUSTOMERS)
+def generate_branches(n_branches):
+    branches = []
+    
+    locations = [
+        ("Brussels", "Brussels-Capital"),
+        ("Antwerp", "Flanders"),
+        ("Ghent", "Flanders"),
+        ("Bruges", "Flanders"),
+        ("Leuven", "Flanders"),
+        ("Mechelen", "Flanders"),
+        ("Hasselt", "Flanders"),
+        ("Liege", "Wallonia"),
+        ("Namur", "Wallonia"),
+        ("Mons", "Wallonia"),
+        ("Charleroi", "Wallonia"),
+        ("Tournai", "Wallonia")
+    ]
 
+    for i in range(1, n_branches + 1):
+        branch_id = f"B{i:03d}"
+
+        city, region = random.choice(locations)
+
+        branch_name = f"{city} Branch {i}"
+        opening_date = fake.date_between(
+            start_date="-25y",
+            end_date="today"
+)
+
+        manager_name = fake.name()
+        
+        
+
+
+        branches.append({
+            "branch_id": branch_id,
+             "branch_name": branch_name,
+            "city": city,
+            "region": region,
+            "country": "Belgium",
+            "opening_date": opening_date,
+            "manager_name": manager_name
+})
+    return pd.DataFrame(branches)
+
+def generate_accounts(n_accounts, customers_df, branches_df):
+    accounts = []
+
+    customer_ids = customers_df["customer_id"].tolist()
+    branch_ids = branches_df["branch_id"].tolist()
+    
+    customer_join_dates = customers_df.set_index(
+    "customer_id"
+    )["join_date"].to_dict()
+
+    branch_opening_dates = branches_df.set_index(
+    "branch_id"
+    )["opening_date"].to_dict()
+    
+    account_types = ["Checking", "Savings", "Business"]
+    account_type_weights = [0.55, 0.35, 0.10]
+    for i in range(1, n_accounts + 1):
+        account_id = f"A{i:07d}"
+
+        customer_id = random.choice(customer_ids)
+        branch_id = random.choice(branch_ids)
+        account_type = random.choices(
+            account_types,
+            weights=account_type_weights,
+            k=1
+        )[0]
+        if account_type == "Checking":
+            balance = round(
+                max(0, np.random.normal(3_500, 2_500)),
+                2
+            )
+
+        elif account_type == "Savings":
+            balance = round(
+                max(0, np.random.normal(12_000, 8_000)),
+                2
+            )
+
+        else:
+            balance = round(
+                max(0, np.random.normal(30_000, 20_000)),
+                2
+            )   
+        earliest_opening_date = max(
+            customer_join_dates[customer_id],
+            branch_opening_dates[branch_id]
+        )
+
+        days_between = (
+            date.today() - earliest_opening_date
+        ).days
+
+        opening_date = earliest_opening_date + timedelta(
+            days=random.randint(0, days_between)
+        )
+
+        status = random.choices(
+            ["Active", "Inactive", "Closed"],
+            weights=[0.85, 0.10, 0.05],
+            k=1
+        )[0]
+        accounts.append({
+            "account_id": account_id,
+            "customer_id": customer_id,
+            "branch_id": branch_id,
+            "account_type": account_type,
+            "balance": balance,
+            "opening_date": opening_date,
+            "status": status
+
+        })
+        
+    return pd.DataFrame(accounts)
+
+
+customers_df = generate_customers(N_CUSTOMERS)
+branches_df = generate_branches(N_BRANCHES)
+accounts_df = generate_accounts(N_ACCOUNTS, customers_df, branches_df)
 print(customers_df.head())
 print()
 print(customers_df.shape)
+
+print("\n--- BRANCHES ---")
+print(branches_df.head())
+print()
+print(branches_df.shape)
+
+print("\n--- ACCOUNTS ---")
+print(accounts_df.head())
+print()
+print(accounts_df.shape)
 
 output_file = RAW_DATA_DIR / "customers.csv"
 customers_df.to_csv(
@@ -116,4 +249,22 @@ customers_df.to_csv(
 )
 
 print(f"Customers dataset saved to: {output_file}")
+
+branches_output_file = RAW_DATA_DIR / "branches.csv"
+
+branches_df.to_csv(
+    branches_output_file,
+    index=False
+)
+
+print(f"Branches dataset saved to: {branches_output_file}")
+
+accounts_output_file = RAW_DATA_DIR / "accounts.csv"
+
+accounts_df.to_csv(
+    accounts_output_file,
+    index=False
+)
+
+print(f"Accounts dataset saved to: {accounts_output_file}")
 

@@ -1,0 +1,11 @@
+check,errors,status
+Duplicate branch IDs,2,FAIL
+Future opening dates,1,FAIL
+Missing branch ID,0,PASS
+Missing branch name,1,FAIL
+Missing city,0,PASS
+Missing region,0,PASS
+Missing country,0,PASS
+Missing opening date,0,PASS
+Missing manager name,1,FAIL
+Invalid city/region combination,1,FAIL

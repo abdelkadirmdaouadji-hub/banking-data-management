@@ -1,0 +1,17 @@
+check,errors,status
+Invalid customer references,2,FAIL
+Invalid branch references,1,FAIL
+Duplicate account IDs,2,FAIL
+Invalid account types,1,FAIL
+Invalid statuses,1,FAIL
+Negative balances,1,FAIL
+Future opening dates,1,FAIL
+Missing account ID,0,PASS
+Missing customer ID,1,FAIL
+Missing branch ID,0,PASS
+Missing account type,0,PASS
+Missing balance,0,PASS
+Missing opening date,0,PASS
+Missing status,0,PASS
+Accounts before customer join date,0,PASS
+Accounts before branch opening date,0,PASS
