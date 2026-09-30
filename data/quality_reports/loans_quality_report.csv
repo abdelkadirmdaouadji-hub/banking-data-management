@@ -1,0 +1,13 @@
+check_name,error_count,status
+Invalid customer references,0,PASS
+Invalid branch references,0,PASS
+Duplicate loan IDs,0,PASS
+Invalid loan types,0,PASS
+Invalid loan amounts,0,PASS
+Invalid interest rates,0,PASS
+Invalid loan terms,0,PASS
+Future loan start dates,0,PASS
+Invalid loan statuses,0,PASS
+Missing values,0,PASS
+Loans started before customer join date,0,PASS
+Loans started before branch opening date,0,PASS

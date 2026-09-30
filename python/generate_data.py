@@ -23,6 +23,7 @@ PROCESSED_DATA_DIR = PROJECT_ROOT / "data" / "processed"
 N_CUSTOMERS = 50_000
 N_BRANCHES = 25
 N_ACCOUNTS = 65_000
+N_LOANS = 15_000
 
 print("Banking data generator initialized.")
 print(f"Customers to generate: {N_CUSTOMERS:,}")
@@ -224,10 +225,162 @@ def generate_accounts(n_accounts, customers_df, branches_df):
         
     return pd.DataFrame(accounts)
 
+def generate_loans(n_loans, customers_df, branches_df):
+    loans = []
+
+    customer_ids = customers_df["customer_id"].tolist()
+    branch_ids = branches_df["branch_id"].tolist()
+
+    customer_join_dates = customers_df.set_index(
+        "customer_id"
+    )["join_date"].to_dict()
+
+    branch_opening_dates = branches_df.set_index(
+        "branch_id"
+    )["opening_date"].to_dict()
+
+    loan_types = [
+        "Personal",
+        "Mortgage",
+        "Auto",
+        "Business"
+    ]
+
+    loan_type_weights = [
+        0.40,
+        0.30,
+        0.20,
+        0.10
+    ]
+
+    for i in range(1, n_loans + 1):
+        loan_id = f"L{i:06d}"
+
+        customer_id = random.choice(customer_ids)
+        branch_id = random.choice(branch_ids)
+
+        loan_type = random.choices(
+            loan_types,
+            weights=loan_type_weights,
+            k=1
+        )[0]
+
+        # Loan amount
+        if loan_type == "Personal":
+            loan_amount = round(
+                random.uniform(2_000, 40_000),
+                2
+            )
+
+        elif loan_type == "Mortgage":
+            loan_amount = round(
+                random.uniform(80_000, 500_000),
+                2
+            )
+
+        elif loan_type == "Auto":
+            loan_amount = round(
+                random.uniform(10_000, 70_000),
+                2
+            )
+
+        else:
+            loan_amount = round(
+                random.uniform(20_000, 250_000),
+                2
+            )
+
+        # Interest rate
+        if loan_type == "Personal":
+            interest_rate = round(
+                random.uniform(4.0, 12.0),
+                2
+            )
+
+        elif loan_type == "Mortgage":
+            interest_rate = round(
+                random.uniform(2.0, 6.0),
+                2
+            )
+
+        elif loan_type == "Auto":
+            interest_rate = round(
+                random.uniform(3.0, 8.0),
+                2
+            )
+
+        else:
+            interest_rate = round(
+                random.uniform(4.0, 10.0),
+                2
+            )
+
+        # Loan term
+        if loan_type == "Personal":
+            term_months = random.choice([
+                12, 24, 36, 48, 60
+            ])
+
+        elif loan_type == "Mortgage":
+            term_months = random.choice([
+                120, 180, 240, 300, 360
+            ])
+
+        elif loan_type == "Auto":
+            term_months = random.choice([
+                24, 36, 48, 60, 72
+            ])
+
+        else:
+            term_months = random.choice([
+                12, 24, 36, 48, 60, 84
+            ])
+
+        # Loan start date
+        earliest_start_date = max(
+            customer_join_dates[customer_id],
+            branch_opening_dates[branch_id]
+        )
+
+        days_between = (
+            date.today() - earliest_start_date
+        ).days
+
+        start_date = earliest_start_date + timedelta(
+            days=random.randint(0, days_between)
+        )
+
+        # Loan status
+        loan_status = random.choices(
+            ["Active", "Paid", "Defaulted"],
+            weights=[0.70, 0.25, 0.05],
+            k=1
+        )[0]
+
+        # Add the loan to the dataset
+        loans.append({
+            "loan_id": loan_id,
+            "customer_id": customer_id,
+            "branch_id": branch_id,
+            "loan_type": loan_type,
+            "loan_amount": loan_amount,
+            "interest_rate": interest_rate,
+            "term_months": term_months,
+            "start_date": start_date,
+            "loan_status": loan_status
+        })
+
+    return pd.DataFrame(loans)        
+
 
 customers_df = generate_customers(N_CUSTOMERS)
 branches_df = generate_branches(N_BRANCHES)
 accounts_df = generate_accounts(N_ACCOUNTS, customers_df, branches_df)
+loans_df = generate_loans(
+    N_LOANS,
+    customers_df,
+    branches_df
+)
 print(customers_df.head())
 print()
 print(customers_df.shape)
@@ -241,6 +394,12 @@ print("\n--- ACCOUNTS ---")
 print(accounts_df.head())
 print()
 print(accounts_df.shape)
+
+print("\n--- LOANS ---")
+print(loans_df.head())
+print()
+print(loans_df.shape)
+
 
 output_file = RAW_DATA_DIR / "customers.csv"
 customers_df.to_csv(
@@ -268,3 +427,11 @@ accounts_df.to_csv(
 
 print(f"Accounts dataset saved to: {accounts_output_file}")
 
+loans_output_file = RAW_DATA_DIR / "loans.csv"
+
+loans_df.to_csv(
+    loans_output_file,
+    index=False
+)
+
+print(f"Loans dataset saved to: {loans_output_file}")
