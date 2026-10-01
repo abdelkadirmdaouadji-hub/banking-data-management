@@ -24,6 +24,7 @@ N_CUSTOMERS = 50_000
 N_BRANCHES = 25
 N_ACCOUNTS = 65_000
 N_LOANS = 15_000
+N_TRANSACTIONS = 300_000
 
 print("Banking data generator initialized.")
 print(f"Customers to generate: {N_CUSTOMERS:,}")
@@ -370,7 +371,179 @@ def generate_loans(n_loans, customers_df, branches_df):
             "loan_status": loan_status
         })
 
-    return pd.DataFrame(loans)        
+    return pd.DataFrame(loans)
+
+def generate_transactions(
+    n_transactions,
+    accounts_df
+):
+    transactions = []
+
+    account_ids = accounts_df[
+        "account_id"
+    ].tolist()
+
+    account_opening_dates = accounts_df.set_index(
+        "account_id"
+    )["opening_date"].to_dict()
+
+    transaction_types = [
+        "Card Payment",
+        "Bank Transfer",
+        "Cash Withdrawal",
+        "Direct Debit",
+        "Deposit"
+    ]
+
+    transaction_type_weights = [
+        0.40,
+        0.25,
+        0.15,
+        0.10,
+        0.10
+    ]
+
+    channels = [
+        "Mobile",
+        "Web",
+        "ATM",
+        "Branch",
+        "POS"
+    ]
+    
+    for i in range(1, n_transactions + 1):
+        transaction_id = f"T{i:09d}"
+
+        account_id = random.choice(
+            account_ids
+        )
+
+        account_opening_date = (
+            account_opening_dates[account_id]
+        )
+
+        days_between = (
+            date.today() - account_opening_date
+        ).days
+
+        transaction_date = (
+            account_opening_date
+            + timedelta(
+                days=random.randint(
+                    0,
+                    days_between
+                )
+            )
+        )
+        
+        transaction_type = random.choices(
+            transaction_types,
+            weights=transaction_type_weights,
+            k=1
+        )[0]
+
+        if transaction_type == "Card Payment":
+            channel = random.choice([
+                "POS",
+                "Web",
+                "Mobile"
+            ])
+
+        elif transaction_type == "Cash Withdrawal":
+            channel = "ATM"
+
+        elif transaction_type == "Bank Transfer":
+            channel = random.choice([
+                "Mobile",
+                "Web",
+                "Branch"
+            ])
+
+        elif transaction_type == "Direct Debit":
+            channel = random.choice([
+                "Web",
+                "Mobile"
+            ])
+
+        else:
+            channel = random.choice([
+                "ATM",
+                "Branch"
+            ]) 
+            
+        # Transaction amount
+        if transaction_type == "Card Payment":
+            amount = round(
+                random.uniform(5, 500),
+                2
+            )
+
+        elif transaction_type == "Cash Withdrawal":
+            amount = round(
+                random.uniform(20, 1000),
+                2
+            )
+
+        elif transaction_type == "Bank Transfer":
+            amount = round(
+                random.uniform(50, 10_000),
+                2
+            )
+
+        elif transaction_type == "Direct Debit":
+            amount = round(
+                random.uniform(10, 2_000),
+                2
+            )
+
+        else:
+            # Deposit
+            amount = round(
+                random.uniform(20, 5_000),
+                2
+            )
+            
+        # Transaction status
+        transaction_status = random.choices(
+            [
+                "Completed",
+                "Failed",
+                "Pending"
+            ],
+            weights=[
+                0.94,
+                0.04,
+                0.02
+            ],
+            k=1
+        )[0]
+        
+        # Merchant category
+        if transaction_type == "Card Payment":
+            merchant_category = random.choice([
+                "Groceries",
+                "Restaurants",
+                "Transport",
+                "Shopping",
+                "Entertainment",
+                "Healthcare",
+                "Travel"
+            ])
+        else:
+            merchant_category = None
+            
+        transactions.append({
+            "transaction_id": transaction_id,
+            "account_id": account_id,
+            "transaction_date": transaction_date,
+            "transaction_type": transaction_type,
+            "amount": amount,
+            "channel": channel,
+            "merchant_category": merchant_category,
+            "transaction_status": transaction_status
+        })
+        
+    return pd.DataFrame(transactions)       
 
 
 customers_df = generate_customers(N_CUSTOMERS)
@@ -381,6 +554,11 @@ loans_df = generate_loans(
     customers_df,
     branches_df
 )
+transactions_df = generate_transactions(
+    N_TRANSACTIONS,
+    accounts_df
+)
+
 print(customers_df.head())
 print()
 print(customers_df.shape)
@@ -399,6 +577,11 @@ print("\n--- LOANS ---")
 print(loans_df.head())
 print()
 print(loans_df.shape)
+
+print("\n--- TRANSACTIONS ---")
+print(transactions_df.head())
+print()
+print(transactions_df.shape)
 
 
 output_file = RAW_DATA_DIR / "customers.csv"
@@ -435,3 +618,17 @@ loans_df.to_csv(
 )
 
 print(f"Loans dataset saved to: {loans_output_file}")
+
+transactions_output_file = (
+    RAW_DATA_DIR / "transactions.csv"
+)
+
+transactions_df.to_csv(
+    transactions_output_file,
+    index=False
+)
+
+print(
+    f"Transactions dataset saved to: "
+    f"{transactions_output_file}"
+)

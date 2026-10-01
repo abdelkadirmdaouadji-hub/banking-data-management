@@ -1,0 +1,12 @@
+check,error_count,status
+Invalid account references,0,PASS
+Duplicate transaction IDs,0,PASS
+Invalid transaction types,0,PASS
+Invalid transaction amounts,0,PASS
+Future transaction dates,0,PASS
+Invalid transaction statuses,0,PASS
+Invalid transaction channels,0,PASS
+Invalid type/channel combinations,0,PASS
+Transactions before account opening,0,PASS
+Missing required values,0,PASS
+Invalid merchant categories,0,PASS

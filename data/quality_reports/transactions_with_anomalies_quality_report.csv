@@ -1,0 +1,12 @@
+check,error_count,status
+Invalid account references,2,FAIL
+Duplicate transaction IDs,2,FAIL
+Invalid transaction types,1,FAIL
+Invalid transaction amounts,1,FAIL
+Future transaction dates,1,FAIL
+Invalid transaction statuses,1,FAIL
+Invalid transaction channels,1,FAIL
+Invalid type/channel combinations,4,FAIL
+Transactions before account opening,1,FAIL
+Missing required values,1,FAIL
+Invalid merchant categories,3,FAIL
