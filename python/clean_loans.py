@@ -18,7 +18,7 @@ LOANS_FILE = (
 )
 
 CUSTOMERS_FILE = (
-    PROJECT_ROOT / "data" / "raw" / "customers.csv"
+    PROJECT_ROOT / "data" / "processed" / "customers.csv"
 )
 
 BRANCHES_FILE = (

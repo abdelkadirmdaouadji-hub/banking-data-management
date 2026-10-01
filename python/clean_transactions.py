@@ -34,7 +34,7 @@ transactions = pd.read_csv(
 )
 
 accounts = pd.read_csv(
-    RAW_DATA_DIR / "accounts.csv",
+    PROCESSED_DATA_DIR / "accounts_clean.csv",
     parse_dates=["opening_date"]
 )
 

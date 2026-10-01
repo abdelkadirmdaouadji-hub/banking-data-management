@@ -16,7 +16,7 @@ ACCOUNTS_FILE = (
     / "raw"
     / file_name
 )
-CUSTOMERS_FILE = PROJECT_ROOT / "data" / "raw" / "customers.csv"
+CUSTOMERS_FILE = PROJECT_ROOT / "data" / "processed" / "customers.csv"
 BRANCHES_FILE = PROJECT_ROOT / "data" / "raw" / "branches.csv"
 
 accounts = pd.read_csv(
