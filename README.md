@@ -251,7 +251,7 @@ banking-data-management/
 ### 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/abdelkadirmdaouadji-hub/banking-data-management.git
 cd banking-data-management
 ```
 
