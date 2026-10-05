@@ -187,6 +187,20 @@ The branch performance view aggregates account and loan metrics separately befor
 
 ## Power BI Dashboard
 
+### Dashboard Preview
+
+#### Executive Overview
+![Executive Overview](images/executive_overview.png)
+
+#### Customers & Accounts
+![Customers and Accounts](images/customers_accounts.png)
+
+#### Loans & Risk
+![Loans and Risk](images/loans_risk.png)
+
+#### Transactions
+![Transaction Analysis](images/transactions.png)
+
 The Power BI reporting layer has been designed and documented and will be implemented in Power BI Desktop.
 
 The dashboard is structured into four analytical pages:
