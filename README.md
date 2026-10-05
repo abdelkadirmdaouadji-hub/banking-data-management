@@ -404,17 +404,17 @@ After data quality validation, cleaning, and referential integrity enforcement, 
 |---|---:|
 | Customers | 49,989 |
 | Branches | 25 |
-| Accounts | 64,984 |
-| Loans | 14,997 |
-| Transactions | 299,923 |
+| Accounts | 64,978 |
+| Loans | 14,996 |
+| Transactions | 299,893 |
 
 Additional portfolio metrics:
 
 | Metric | Value |
 |---|---:|
-| Total Account Balance | 608,394,652.38 |
-| Total Loan Amount | 1,749,007,200.05 |
-| Transaction Volume | 535,137,657.26 |
+| Total Account Balance | 609,665,953.17 |
+| Total Loan Amount | 1,735,493,756.45 |
+| Transaction Volume | 534,164,969.13 |
 
 > These figures describe the synthetic dataset generated for this project. Financial amounts and distributions should not be interpreted as real banking performance or market statistics.
 
