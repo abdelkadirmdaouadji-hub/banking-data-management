@@ -201,7 +201,7 @@ The branch performance view aggregates account and loan metrics separately befor
 #### Transactions
 ![Transaction Analysis](images/transactions.png)
 
-The Power BI reporting layer has been designed and documented and will be implemented in Power BI Desktop.
+The Power BI reporting layer has been implemented in Power BI Desktop and is included in this repository.
 
 The dashboard is structured into four analytical pages:
 
@@ -210,7 +210,7 @@ The dashboard is structured into four analytical pages:
 3. **Loans & Risk** — loan portfolio, status, and synthetic risk analysis
 4. **Transactions** — transaction activity, channels, types, and status analysis
 
-The planned Power BI model includes:
+The implemented Power BI model includes:
 
 - One-to-many relationships
 - Single-direction filtering
@@ -222,7 +222,7 @@ The planned Power BI model includes:
 
 Detailed Power BI model design, relationships, DAX measures, and dashboard specifications are documented in `powerbi/README.md`.
 
-> **Status:** Dashboard design completed. Power BI Desktop implementation is pending.
+> **Status:** Power BI dashboard completed and included in the repository (`powerbi/banking_data_management_dashboard.pbix`).
 
 
 ## Repository Structure
@@ -241,7 +241,8 @@ banking-data-management/
 ├── images/                  # Dashboard and project screenshots
 │
 ├── powerbi/
-│   └── README.md            # Power BI model, DAX and dashboard design
+│   ├── README.md            # Power BI model, DAX and dashboard documentation
+│   └── banking_data_management_dashboard.pbix  # Completed Power BI dashboard
 │
 ├── python/
 │   ├── generate_data.py
