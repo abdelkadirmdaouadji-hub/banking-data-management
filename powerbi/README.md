@@ -163,22 +163,9 @@ DISTINCTCOUNT(transactions[transaction_id])
 
 Transaction Volume =
 SUM(transactions[amount])
+```
 
-
-
-### À quoi ça sert ?
-
-On prépare les indicateurs qui apparaîtront en haut de notre future page **Executive Overview**.
-
-Par exemple :
-
-```text
-Customers        49,989
-Accounts         64,984
-Account Balance  €608.39M
-Loans            14,997
-Transactions     299,923
-
+These measures provide the principal indicators used in the Executive Overview.
 
 ### Loan KPIs
 
